@@ -67,5 +67,80 @@ export default {
             console.error(err);
             res.status(500).send('Lỗi khi thêm dữ liệu');
         }
+    },
+
+    // API methods
+    listCourses: async (req, res) => {
+        try {
+            const instructorId = req.query.instructor_id || 'all';
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const offset = (page - 1) * limit;
+
+            const total = await courseModel.count(instructorId);
+            const courses = await courseModel.page(limit, offset, instructorId);
+
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    items: courses,
+                    meta: {
+                        page,
+                        limit,
+                        total,
+                        totalPages: Math.ceil(total / limit)
+                    }
+                }
+            });
+        } catch (error) {
+            res.status(500).json({ status: 'error', message: error.message });
+        }
+    },
+
+    getCourse: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const course = await courseModel.getById(id);
+            if (!course) {
+                return res.status(404).json({ status: 'error', message: 'Course not found' });
+            }
+            res.status(200).json({ status: 'success', data: course });
+        } catch (error) {
+            res.status(500).json({ status: 'error', message: error.message });
+        }
+    },
+
+    createCourse: async (req, res) => {
+        try {
+            const courseData = req.body;
+            courseData.is_bestseller = courseData.is_bestseller || false;
+            const [courseId] = await courseModel.add(courseData);
+            const course = await courseModel.getById(courseId);
+            res.status(201).json({ status: 'success', data: course });
+        } catch (error) {
+            res.status(500).json({ status: 'error', message: error.message });
+        }
+    },
+
+    updateCourse: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const updateData = req.body;
+            await courseModel.update(id, updateData);
+            const course = await courseModel.getById(id);
+            res.status(200).json({ status: 'success', data: course });
+        } catch (error) {
+            res.status(500).json({ status: 'error', message: error.message });
+        }
+    },
+
+    deleteCourse: async (req, res) => {
+        try {
+            const { id } = req.params;
+            await courseModel.delete(id);
+            res.status(200).json({ status: 'success', message: 'Course deleted successfully' });
+        } catch (error) {
+            res.status(500).json({ status: 'error', message: error.message });
+        }
     }
 };

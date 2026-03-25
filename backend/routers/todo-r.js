@@ -2,7 +2,7 @@ import express from 'express';
 import * as todoController from '../controllers/todo-c.js';
 import { protect } from '../middlewares/auth-mw.js';
 import { validate } from '../middlewares/validate-mw.js';
-import { todoIdParamSchema } from '../validators/todo-schema.js';
+import { todoIdParamSchema, updateTodoSchema } from '../validators/todo-schema.js';
 
 const router = express.Router();
 
@@ -120,5 +120,78 @@ router.get(
  *               $ref: '#/components/schemas/Todo'
  */
 router.post('/', todoController.createTodo);
+
+/**
+ * @openapi
+ * /todos/{id}:
+ *   put:
+ *     tags:
+ *       - Todos
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Cập nhật Todo
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Làm bài tập Web"
+ *               description:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: [PENDING, DONE]
+ *               due_date:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       200:
+ *         description: Cập nhật thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Todo'
+ */
+router.put(
+  '/:id',
+  validate(todoIdParamSchema, 'params'),
+  validate(updateTodoSchema, 'body'),
+  todoController.updateTodo
+);
+
+/**
+ * @openapi
+ * /todos/{id}:
+ *   delete:
+ *     tags:
+ *       - Todos
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Xóa Todo
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Xóa thành công
+ */
+router.delete(
+  '/:id',
+  validate(todoIdParamSchema, 'params'),
+  todoController.deleteTodo
+);
 
 export default router;

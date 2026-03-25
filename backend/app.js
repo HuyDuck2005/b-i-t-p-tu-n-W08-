@@ -10,6 +10,7 @@ import errorMW from './middlewares/error-mw.js';
 // Import các Router
 import userRouter from './routers/user.route.js';
 import todoRouter from './routers/todo-r.js';
+import courseApiRouter from './routers/course-api.route.js';
 
 // Import Swagger
 import swaggerUi from 'swagger-ui-express';
@@ -43,6 +44,7 @@ app.get('/docs', (req, res) => res.redirect('/api-docs'));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/todos', todoRouter); 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/courses', courseApiRouter);
 // 5. Xử lý lỗi (LUÔN PHẢI ĐỂ CUỐI CÙNG)
 app.use((req, res) => res.error({ message: `Đường dẫn ${req.originalUrl} không tồn tại` }, 404));
 app.use(errorMW);

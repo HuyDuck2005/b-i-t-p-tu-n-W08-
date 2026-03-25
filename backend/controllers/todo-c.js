@@ -60,3 +60,40 @@ export const createTodo = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Cập nhật Todo
+ */
+export const updateTodo = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const data = { ...req.body };
+
+    const updatedTodo = await todoService.updateTodo({ userId, id, data });
+    return res.status(200).json({
+      status: 'success',
+      data: updatedTodo
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Xóa Todo
+ */
+export const deleteTodo = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const result = await todoService.deleteTodo({ userId, id });
+    return res.status(200).json({
+      status: 'success',
+      data: result
+    });
+  } catch (error) {
+    next(error);
+  }
+};

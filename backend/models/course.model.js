@@ -46,5 +46,21 @@ export default {
 
     add: async (course) => {
         return await db('courses').insert(course);
+    },
+
+    getById: async (id) => {
+        return await db('courses')
+            .join('instructors', 'courses.instructor_id', 'instructors.instructor_id')
+            .select('courses.*', 'instructors.name as instructor_name')
+            .where('courses.course_id', id)
+            .first();
+    },
+
+    update: async (id, data) => {
+        return await db('courses').where('course_id', id).update(data);
+    },
+
+    delete: async (id) => {
+        return await db('courses').where('course_id', id).del();
     }
 };

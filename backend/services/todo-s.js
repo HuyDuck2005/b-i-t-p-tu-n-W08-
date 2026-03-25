@@ -58,3 +58,12 @@ export async function updateTodo({ userId, id, data }) {
   if (data.due_date) assertDueDateNotPast(data.due_date);
   return Todo.update({ id, data });
 }
+
+// 5. Hàm xóa Todo
+export async function deleteTodo({ userId, id }) {
+  const todo = await Todo.findByIdAndUserId({ id, userId });
+  if (!todo) throw AppError.notFound("TODO_NOT_FOUND", "Todo not found or not yours");
+
+  await Todo.delete(id);
+  return { message: "Todo deleted successfully" };
+}
