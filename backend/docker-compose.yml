@@ -4,8 +4,8 @@ services:
     container_name: todo_db
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: mydb
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: course_db
     ports:
       - "15432:5432"
     healthcheck:
