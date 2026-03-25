@@ -1,0 +1,140 @@
+<div class="container py-5">
+  <div class="mx-auto" style="max-width: 720px;">
+    <div class="mb-4">
+      <h1 class="h3 fw-bold text-dark mb-2">
+        <i class="fas fa-plus-circle text-primary me-2"></i>
+        Create New Course
+      </h1>
+      <p class="text-muted mb-0">Fill in the information below to create a new course</p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-md-5">
+        <form id="courseForm" method="POST" action="/courses/create" novalidate>
+          
+          <div class="mb-3">
+            <label for="title" class="form-label fw-semibold">Course Title <span class="text-danger">*</span></label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Python Masterclass" required>
+            <div class="invalid-feedback">Vui lòng nhập tên khóa học.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label fw-semibold">Course Description <span class="text-danger">*</span></label>
+            <textarea id="description" name="description" rows="4" class="form-control" placeholder="Describe content..." required minlength="50"></textarea>
+            <div class="form-text">Minimum 50 characters</div>
+            <div class="invalid-feedback">Mô tả phải có ít nhất 50 ký tự.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label fw-semibold">Course Image URL <span class="text-danger">*</span></label>
+            <input type="url" id="imageUrl" name="imageUrl" class="form-control" placeholder="https://..." required>
+            <div class="invalid-feedback">Vui lòng nhập đường dẫn hình ảnh hợp lệ.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="instructorId" class="form-label fw-semibold">Instructor <span class="text-danger">*</span></label>
+            <select id="instructorId" name="instructorId" class="form-select" required>
+              <option value="">-- Select Instructor --</option>
+              {{#each instructors}}
+                <option value="{{this.instructor_id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn giảng viên.</div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="rating" class="form-label fw-semibold">Rating <span class="text-danger">*</span></label>
+              <input type="number" id="rating" name="rating" class="form-control" placeholder="4.5" step="0.1" min="0" max="5" required>
+              <div class="invalid-feedback">Điểm đánh giá từ 0 - 5.</div>
+            </div>
+            <div class="col-md-6">
+              <label for="totalReviews" class="form-label fw-semibold">Total Reviews <span class="text-danger">*</span></label>
+              <input type="number" id="totalReviews" name="totalReviews" class="form-control" placeholder="150" min="0" required>
+              <div class="invalid-feedback">Số lượng đánh giá không hợp lệ.</div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="totalHours" class="form-label fw-semibold">Total Hours <span class="text-danger">*</span></label>
+              <input type="number" id="totalHours" name="totalHours" class="form-control" placeholder="10.5" step="0.1" min="0" required>
+              <div class="invalid-feedback">Vui lòng nhập tổng giờ học.</div>
+            </div>
+            <div class="col-md-6">
+              <label for="totalLectures" class="form-label fw-semibold">Total Lectures <span class="text-danger">*</span></label>
+              <input type="number" id="totalLectures" name="totalLectures" class="form-control" placeholder="45" min="0" required>
+              <div class="invalid-feedback">Vui lòng nhập tổng số bài giảng.</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="level" class="form-label fw-semibold">Course Level <span class="text-danger">*</span></label>
+            <select id="level" name="level" class="form-select" required>
+              <option value="">-- Select Level --</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+              <option value="All Levels">All Levels</option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn cấp độ.</div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label for="currentPrice" class="form-label fw-semibold">Current Price (VND) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text">₫</span>
+                <input type="number" id="currentPrice" name="currentPrice" class="form-control" placeholder="279000" min="0" required>
+                <div class="invalid-feedback">Giá tiền không hợp lệ.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="originalPrice" class="form-label fw-semibold">Original Price (VND) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text">₫</span>
+                <input type="number" id="originalPrice" name="originalPrice" class="form-control" placeholder="399000" min="0" required>
+                <div class="invalid-feedback">Giá gốc không hợp lệ.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="isBestseller" name="isBestseller">
+              <label class="form-check-label fw-semibold" for="isBestseller">
+                <i class="fas fa-crown text-warning me-1"></i> Mark as Bestseller
+              </label>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-flex flex-column flex-sm-row gap-2 justify-content-end">
+            <a href="/courses" class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center">
+              <i class="fas fa-arrow-left me-2"></i> Back
+            </a>
+            <button type="submit" class="btn btn-primary d-inline-flex align-items-center justify-content-center shadow-sm">
+              <i class="fas fa-save me-2"></i> Create Course
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Chức năng Validation Client-side (Bắt buộc theo đề bài)
+  (() => {
+    'use strict'
+    const form = document.getElementById('courseForm')
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })()
+</script>

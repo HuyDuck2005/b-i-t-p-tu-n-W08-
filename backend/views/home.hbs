@@ -1,0 +1,120 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">All Courses</h2>
+        <p class="text-muted mb-0">Browse and explore our collection of courses</p>
+    </div>
+    <a href="/courses/new" class="btn btn-primary fw-bold px-4 py-2">
+        <i class="bi bi-plus-circle me-1"></i> Create New Course
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-white p-3 shadow-sm border-0">
+            <div class="sidebar-title mb-3">
+                <span><i class="bi bi-person-video3 me-2"></i> Instructors</span>
+                <span class="badge bg-light text-dark border">{{instructors.length}}</span>
+            </div>
+            <p class="text-muted small mb-2">Select instructor to filter courses</p>
+            
+            <div class="d-flex flex-column gap-1">
+                <a href="/?instructor_id=all" 
+                   class="instructor-item text-decoration-none rounded {{#if (eq selectedInstructor 'all')}}active{{else}}text-dark{{/if}}">
+                   <div class="d-flex justify-content-between align-items-center">
+                       <span class="fw-bold">All</span>
+                       {{#if (eq selectedInstructor 'all')}}<i class="bi bi-check-lg"></i>{{/if}}
+                   </div>
+                   <small class="{{#if (eq selectedInstructor 'all')}}text-light{{else}}text-muted{{/if}}">
+                       {{total}} courses
+                   </small>
+                </a>
+
+                {{#each instructors}}
+                <a href="/?instructor_id={{this.instructor_id}}" 
+                   class="instructor-item text-decoration-none rounded {{#if (eq ../selectedInstructor this.instructor_id)}}active{{else}}text-dark{{/if}}">
+                   <div class="fw-bold">{{this.name}}</div>
+                   <small class="{{#if (eq ../selectedInstructor this.instructor_id)}}text-light{{else}}text-muted{{/if}}">
+                       {{this.total_courses}} course • {{this.total_students}}+ students
+                   </small>
+                </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <p class="text-muted mb-3">{{showingText}}</p>
+
+        {{#each courses}}
+        <div class="card mb-3 overflow-hidden shadow-sm border-0">
+            <div class="row g-0">
+                <div class="col-md-4 position-relative">
+                    <img src="{{this.image_url}}" class="card-img-left" alt="{{this.title}}">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body h-100 d-flex flex-column">
+                        <div class="mb-1">
+                            <a href="#" class="course-title">{{this.title}}</a>
+                            {{#if this.is_bestseller}}
+                                <span class="badge badge-bestseller">BESTSELLER</span>
+                            {{/if}}
+                        </div>
+                        
+                        <p class="card-text text-muted small mb-2 text-truncate">{{this.description}}</p>
+                        <p class="small text-muted mb-2">By: {{this.instructor_name}}</p>
+                        
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-warning fw-bold me-1">{{this.rating}}</span>
+                            <div class="text-warning small me-1">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                            </div>
+                            <small class="text-muted">({{this.total_reviews}})</small>
+                        </div>
+
+                        <div class="small text-muted mb-3">
+                            {{this.total_hours}} total hours • {{this.total_lectures}} lectures • {{this.level}}
+                        </div>
+
+                        <div class="mt-auto d-flex justify-content-between align-items-end">
+                            <span class="badge badge-level">{{this.level}}</span>
+                            <div>
+                                <span class="price-current">{{formatCurrency this.current_price}}</span>
+                                <span class="price-original">{{formatCurrency this.original_price}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+            <div class="alert alert-warning">No courses found on this page.</div>
+        {{/each}}
+
+        <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item {{#unless pagination.can_go_prev}}disabled{{/unless}}">
+                    <a class="page-link border-0 bg-light text-muted" 
+                       href="?page={{pagination.prev}}&instructor_id={{selectedInstructor}}">
+                       <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+
+                {{#each pagination.pageNumbers}}
+                <li class="page-item {{#if this.isActive}}active{{/if}}">
+                    <a class="page-link border-0 {{#if this.isActive}}bg-primary text-white{{else}}text-dark{{/if}}" 
+                       href="?page={{this.value}}&instructor_id={{../selectedInstructor}}">
+                       {{this.value}}
+                    </a>
+                </li>
+                {{/each}}
+
+                <li class="page-item {{#unless pagination.can_go_next}}disabled{{/unless}}">
+                    <a class="page-link border-0 text-primary" 
+                       href="?page={{pagination.next}}&instructor_id={{selectedInstructor}}">
+                       <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

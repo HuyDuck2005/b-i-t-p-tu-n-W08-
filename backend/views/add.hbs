@@ -1,0 +1,61 @@
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h4>Add New Course</h4>
+    </div>
+    <div class="card-body">
+        <form action="/courses/store" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" required>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                     <label class="form-label">Instructor</label>
+                     <select name="instructor_id" class="form-select">
+                         {{#each instructors}}
+                         <option value="{{this.instructor_id}}">{{this.name}}</option>
+                         {{/each}}
+                     </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Level</label>
+                    <select name="level" class="form-select">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>All Levels</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Current Price</label>
+                    <input type="number" name="current_price" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Original Price</label>
+                    <input type="number" name="original_price" class="form-control">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                 <label class="form-label">Image URL</label>
+                 <input type="text" name="image_url" class="form-control" placeholder="https://...">
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="is_bestseller" id="bs">
+                <label class="form-check-label" for="bs">Is Bestseller?</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Course</button>
+            <a href="/" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
