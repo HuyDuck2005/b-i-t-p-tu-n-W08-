@@ -7,7 +7,7 @@ import 'dotenv/config';
 export default {
   development: {
     client: 'pg',
-    connection: {
+    connection: process.env.DATABASE_URL || {
       host: process.env.DB_HOST || 'localhost',
       port: Number(process.env.DB_PORT) || 54232,
       user: process.env.DB_USER || 'suser',
